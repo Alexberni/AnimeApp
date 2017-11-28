@@ -1,6 +1,7 @@
 package com.example.alex.retrofitapp.Adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.ViewHolder> 
     private Context context;
     private ArrayList<String> imageUrl = new ArrayList<>();
     private ArrayList<String> ageRating = new ArrayList<>();
+    private AnimeList aux;
 
     public AnimeAdapter(Context context, AnimeList animeList) {
         for (Datum animeData : animeList.getData()
@@ -35,6 +37,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.ViewHolder> 
             itemsData.add(animeData.getAttributes().getCanonicalTitle());
             imageUrl.add(animeData.getAttributes().getPosterImage().getMedium());
             ageRating.add(animeData.getAttributes().getAgeRatingGuide());
+            this.aux = animeList;
         }
 
         this.context = context;
@@ -49,7 +52,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.ViewHolder> 
                 .inflate(R.layout.anime_recycle, null);
         // create ViewHolder
 
-        ViewHolder viewHolder = new ViewHolder(itemLayoutView);
+        ViewHolder viewHolder = new ViewHolder(itemLayoutView, aux);
 
 
         return viewHolder;
@@ -74,7 +77,7 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.ViewHolder> 
         public TextView txtViewTitle;
         public ImageView animeImage;
         public TextView ageRatingtxt;
-        public ViewHolder(View itemLayoutView) {
+        public ViewHolder(View itemLayoutView, final AnimeList aux) {
             super(itemLayoutView);
             txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.animeTitle);
             animeImage = (ImageView) itemLayoutView.findViewById(R.id.animeImage);
@@ -86,6 +89,10 @@ public class AnimeAdapter extends RecyclerView.Adapter<AnimeAdapter.ViewHolder> 
                     Toast.makeText(view.getContext(), txtViewTitle.getText(), Toast.LENGTH_SHORT).show();
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
                     AnimeDetailFragment detail = new AnimeDetailFragment();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", aux.getData().get(getAdapterPosition()).getId());
+                    detail.setArguments(bundle);
                     final FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.dataFragment, detail);
                     transaction.addToBackStack(null);

@@ -18,9 +18,10 @@ import android.view.MenuItem;
 import com.example.alex.retrofitapp.Fragments.AllAnimesFragment;
 import com.example.alex.retrofitapp.Fragments.AllMangasFragment;
 import com.example.alex.retrofitapp.Fragments.AnimeDetailFragment;
+import com.example.alex.retrofitapp.Fragments.MangaDetailFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FragmentContainer.OnFragmentInteractionListener, AllAnimesFragment.OnFragmentInteractionListener, AllMangasFragment.OnFragmentInteractionListener, AnimeDetailFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentContainer.OnFragmentInteractionListener, AllAnimesFragment.OnFragmentInteractionListener, AllMangasFragment.OnFragmentInteractionListener, AnimeDetailFragment.OnFragmentInteractionListener, MangaDetailFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

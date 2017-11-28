@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.alex.retrofitapp.AnimePojo.Anime;
 import com.example.alex.retrofitapp.KitsuServices;
+import com.example.alex.retrofitapp.MangaPojo.Manga;
 import com.example.alex.retrofitapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -34,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Use the {@link AnimeDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AnimeDetailFragment extends Fragment {
+public class MangaDetailFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,7 +50,7 @@ public class AnimeDetailFragment extends Fragment {
     private TextView sinopsis;
 
 
-    public AnimeDetailFragment() {
+    public MangaDetailFragment() {
         // Required empty public constructor
     }
 
@@ -62,8 +63,8 @@ public class AnimeDetailFragment extends Fragment {
      * @return A new instance of fragment AnimeDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AnimeDetailFragment newInstance(String param1, String param2) {
-        AnimeDetailFragment fragment = new AnimeDetailFragment();
+    public static MangaDetailFragment newInstance(String param1, String param2) {
+        MangaDetailFragment fragment = new MangaDetailFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -84,7 +85,7 @@ public class AnimeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_anime_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_manga_detail, container, false);
         loadJSON();
         return rootView;
     }
@@ -134,16 +135,16 @@ public class AnimeDetailFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         KitsuServices request = retrofit.create(KitsuServices.class);
-        Call<Anime> call = request.getAnime(getArguments().getString("id"));
-        call.enqueue(new Callback<Anime>() {
+        Call<Manga> call = request.getManga(getArguments().getString("id"));
+        call.enqueue(new Callback<Manga>() {
             @Override
-            public void onResponse(Call<Anime> call, Response<Anime> response) {
-                Anime animePojo = response.body();
-                if(animePojo!= null) {
+            public void onResponse(Call<Manga> call, Response<Manga> response) {
+                Manga mangaPojo = response.body();
+                if(mangaPojo!= null) {
                     image =  (ImageView)getActivity().findViewById(R.id.detailImage);
-                    Picasso.with(getContext()).load(animePojo.getData().getAttributes().getPosterImage().getLarge()).into(image);
+                    Picasso.with(getContext()).load(mangaPojo.getData().getAttributes().getPosterImage().getLarge()).into(image);
                     sinopsis =  (TextView) getActivity().findViewById(R.id.sinposis);
-                    sinopsis.setText(animePojo.getData().getAttributes().getSynopsis());
+                    sinopsis.setText(mangaPojo.getData().getAttributes().getSynopsis());
                 }
                 else
                     Toast.makeText(getContext(), "Error on getting Anime", Toast.LENGTH_SHORT).show();
@@ -151,9 +152,10 @@ public class AnimeDetailFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Anime> call, Throwable t) {
+            public void onFailure(Call<Manga> call, Throwable t) {
                 Log.d("Error",t.getMessage());
             }
         });
     }
 }
+

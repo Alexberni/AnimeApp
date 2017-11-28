@@ -1,6 +1,7 @@
 package com.example.alex.retrofitapp.Adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alex.retrofitapp.Fragments.AnimeDetailFragment;
+import com.example.alex.retrofitapp.Fragments.MangaDetailFragment;
 import com.example.alex.retrofitapp.MangaListPojo.Datum;
 import com.example.alex.retrofitapp.MangaListPojo.MangaList;
 import com.example.alex.retrofitapp.R;
@@ -29,6 +31,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder> 
     private Context context;
     private ArrayList<String> imageUrl = new ArrayList<>();
     private ArrayList<String> status = new ArrayList<>();
+    private MangaList aux;
 
     public MangaAdapter(Context context, MangaList mangaList) {
         for (Datum mangaData : mangaList.getData()
@@ -37,6 +40,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder> 
             imageUrl.add(mangaData.getAttributes().getPosterImage().getMedium());
             status.add(mangaData.getAttributes().getStatus());
         }
+        this.aux = mangaList;
 
         this.context = context;
     }
@@ -51,7 +55,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder> 
 
         // create ViewHolder
 
-        ViewHolder viewHolder = new ViewHolder(itemLayoutView);
+        ViewHolder viewHolder = new ViewHolder(itemLayoutView, aux);
         return viewHolder;
     }
 
@@ -74,7 +78,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder> 
         public TextView txtViewTitle;
         public ImageView mangaImage;
         public TextView statusTxt;
-        public ViewHolder(View itemLayoutView) {
+        public ViewHolder(View itemLayoutView, final MangaList aux) {
             super(itemLayoutView);
             txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.mangaTitle);
             mangaImage = (ImageView) itemLayoutView.findViewById(R.id.mangaImage);
@@ -85,7 +89,11 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolder> 
                 public void onClick(View view) {
                     Toast.makeText(view.getContext(), txtViewTitle.getText(), Toast.LENGTH_SHORT).show();
                     AppCompatActivity activity = (AppCompatActivity) view.getContext();
-                    AnimeDetailFragment detail = new AnimeDetailFragment();
+
+                    MangaDetailFragment detail = new MangaDetailFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", aux.getData().get(getAdapterPosition()).getId());
+                    detail.setArguments(bundle);
                     final FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.dataFragment, detail);
                     transaction.addToBackStack(null);

@@ -14,6 +14,7 @@ import android.widget.Button;
 import com.example.alex.retrofitapp.Fragments.AllAnimesFragment;
 import com.example.alex.retrofitapp.Fragments.AllMangasFragment;
 import com.example.alex.retrofitapp.Fragments.AnimeDetailFragment;
+import com.example.alex.retrofitapp.Fragments.MangaDetailFragment;
 
 
 /**
@@ -24,7 +25,7 @@ import com.example.alex.retrofitapp.Fragments.AnimeDetailFragment;
  * Use the {@link FragmentContainer#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentContainer extends Fragment implements AllAnimesFragment.OnFragmentInteractionListener, AllMangasFragment.OnFragmentInteractionListener, AnimeDetailFragment.OnFragmentInteractionListener {
+public class FragmentContainer extends Fragment implements AllAnimesFragment.OnFragmentInteractionListener, AllMangasFragment.OnFragmentInteractionListener, AnimeDetailFragment.OnFragmentInteractionListener, MangaDetailFragment.OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
