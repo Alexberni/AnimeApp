@@ -15,8 +15,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.alex.retrofitapp.Fragments.AllAnimesFragment;
+import com.example.alex.retrofitapp.Fragments.AllMangasFragment;
+import com.example.alex.retrofitapp.Fragments.AnimeDetailFragment;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FragmentContainer.OnFragmentInteractionListener, AllAnimesFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentContainer.OnFragmentInteractionListener, AllAnimesFragment.OnFragmentInteractionListener, AllMangasFragment.OnFragmentInteractionListener, AnimeDetailFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentContainer newContainer = new FragmentContainer();
+
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainer, newContainer);
         transaction.addToBackStack(null);
@@ -88,18 +93,24 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_animes) {
+            Bundle bundle = new Bundle();
+            bundle.putString("showThis", "animes");
+            FragmentContainer newContainer = new FragmentContainer();
+            newContainer.setArguments(bundle);
+            final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, newContainer);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        } else if (id == R.id.nav_mangas) {
+            Bundle bundle = new Bundle();
+            bundle.putString("showThis", "mangas");
+            FragmentContainer newContainer = new FragmentContainer();
+            newContainer.setArguments(bundle);
+            final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, newContainer);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -111,4 +122,5 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }

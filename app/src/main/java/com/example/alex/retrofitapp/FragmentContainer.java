@@ -4,10 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.example.alex.retrofitapp.Fragments.AllAnimesFragment;
+import com.example.alex.retrofitapp.Fragments.AllMangasFragment;
+import com.example.alex.retrofitapp.Fragments.AnimeDetailFragment;
 
 
 /**
@@ -18,7 +24,7 @@ import android.view.ViewGroup;
  * Use the {@link FragmentContainer#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentContainer extends Fragment implements AllAnimesFragment.OnFragmentInteractionListener {
+public class FragmentContainer extends Fragment implements AllAnimesFragment.OnFragmentInteractionListener, AllMangasFragment.OnFragmentInteractionListener, AnimeDetailFragment.OnFragmentInteractionListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,6 +35,8 @@ public class FragmentContainer extends Fragment implements AllAnimesFragment.OnF
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private Button animeButton;
+    private Button mangaButton;
 
     public FragmentContainer() {
         // Required empty public constructor
@@ -59,18 +67,70 @@ public class FragmentContainer extends Fragment implements AllAnimesFragment.OnF
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        AllAnimesFragment newAnimes = new AllAnimesFragment();
-        final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.dataFragment, newAnimes);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        FragmentManager fm = getChildFragmentManager();
+        fm.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if(getFragmentManager().getBackStackEntryCount() == 0) getActivity().finish();
+            }
+        });
+        if(getArguments() != null) {
+            String showThis = getArguments().getString("showThis");
+            if (showThis.equals("animes")) {
+                AllAnimesFragment newAnimes = new AllAnimesFragment();
+                final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.dataFragment, newAnimes);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+            else{
+                AllMangasFragment newMangas = new AllMangasFragment();
+                final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.dataFragment, newMangas);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        }
+        else {
+            AllAnimesFragment newAnimes = new AllAnimesFragment();
+            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.dataFragment, newAnimes);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_container, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_container, container, false);
+        animeButton = (Button)rootView.findViewById(R.id.animeButton);
+        mangaButton = (Button)rootView.findViewById(R.id.mangaButton);
+
+        animeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                AllAnimesFragment newAnimes = new AllAnimesFragment();
+                fragmentTransaction.replace(R.id.dataFragment, newAnimes);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+        mangaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                AllMangasFragment newMangas = new AllMangasFragment();
+                fragmentTransaction.replace(R.id.dataFragment, newMangas);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -79,6 +139,8 @@ public class FragmentContainer extends Fragment implements AllAnimesFragment.OnF
             mListener.onFragmentInteraction(uri);
         }
     }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -116,4 +178,5 @@ public class FragmentContainer extends Fragment implements AllAnimesFragment.OnF
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

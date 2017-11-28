@@ -1,7 +1,6 @@
-package com.example.alex.retrofitapp;
+package com.example.alex.retrofitapp.Fragments;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,16 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.alex.retrofitapp.AnimeListPojo.AnimeList;
-import com.example.alex.retrofitapp.AnimeListPojo.Datum;
-import com.example.alex.retrofitapp.AnimePojo.Anime;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.alex.retrofitapp.Adapters.MangaAdapter;
+import com.example.alex.retrofitapp.KitsuServices;
+import com.example.alex.retrofitapp.MangaListPojo.MangaList;
+import com.example.alex.retrofitapp.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,12 +26,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AllAnimesFragment.OnFragmentInteractionListener} interface
+ * {@link AllMangasFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AllAnimesFragment#newInstance} factory method to
+ * Use the {@link AllMangasFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AllAnimesFragment extends Fragment {
+public class AllMangasFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -46,14 +40,13 @@ public class AllAnimesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private OnFragmentInteractionListener mListener;
-    private RecyclerView animeList;
-    private RecyclerView.Adapter animeListAdapter;
-    private RecyclerView.LayoutManager animeListManager;
-    private List<String> data = new ArrayList<String>();
-    private List<String> imageUrl = new ArrayList<String>();
 
-    public AllAnimesFragment() {
+    private OnFragmentInteractionListener mListener;
+    private RecyclerView mangaList;
+    private RecyclerView.Adapter mangaListAdapter;
+    private RecyclerView.LayoutManager mangaListManager;
+
+    public AllMangasFragment() {
         // Required empty public constructor
     }
 
@@ -63,11 +56,11 @@ public class AllAnimesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AllAnimesFragment.
+     * @return A new instance of fragment AllMangasFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AllAnimesFragment newInstance(String param1, String param2) {
-        AllAnimesFragment fragment = new AllAnimesFragment();
+    public static AllMangasFragment newInstance(String param1, String param2) {
+        AllMangasFragment fragment = new AllMangasFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -87,7 +80,8 @@ public class AllAnimesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_all_animes, container, false);
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_all_mangas, container, false);
         // Inflate the layout for this fragment
 
         loadJSON();
@@ -140,34 +134,29 @@ public class AllAnimesFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         KitsuServices request = retrofit.create(KitsuServices.class);
-        Call<AnimeList> call = request.getAnimeList();
-        call.enqueue(new Callback<AnimeList>() {
+        Call<MangaList> call = request.getMangaList();
+        call.enqueue(new Callback<MangaList>() {
             @Override
-            public void onResponse(Call<AnimeList> call, Response<AnimeList> response) {
-                AnimeList animeListPojo = response.body();
-                for (Datum animeData : animeListPojo.getData()
-                     ) {
-                    data.add(animeData.getAttributes().getCanonicalTitle());
-                    imageUrl.add(animeData.getAttributes().getPosterImage().getMedium());
-                }
+            public void onResponse(Call<MangaList> call, Response<MangaList> response) {
+                MangaList mangaListPojo = response.body();
 
-                animeList = (RecyclerView) getView().findViewById(R.id.animeList);
+                mangaList = (RecyclerView) getView().findViewById(R.id.mangaList);
 
                 // use this setting to improve performance if you know that changes
                 // in content do not change the layout size of the RecyclerView
-                animeList.setHasFixedSize(true);
+                mangaList.setHasFixedSize(true);
 
                 // use a linear layout manager
-                animeListManager = new LinearLayoutManager(getActivity());
-                animeList.setLayoutManager(animeListManager);
+                mangaListManager = new LinearLayoutManager(getActivity());
+                mangaList.setLayoutManager(mangaListManager);
 
                 // specify an adapter (see also next example)
-                animeListAdapter = new AnimeAdapter(getContext(), data, imageUrl);
-                animeList.setAdapter(animeListAdapter);
+                mangaListAdapter = new MangaAdapter(getContext(), mangaListPojo);
+                mangaList.setAdapter(mangaListAdapter);
             }
 
             @Override
-            public void onFailure(Call<AnimeList> call, Throwable t) {
+            public void onFailure(Call<MangaList> call, Throwable t) {
                 Log.d("Error",t.getMessage());
             }
         });

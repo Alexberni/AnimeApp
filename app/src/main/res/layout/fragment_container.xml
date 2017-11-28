@@ -9,18 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="60dp">
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/animeButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Animes" />
-
+            android:text="Anime"
+            android:background="@color/colorAccent"
+            android:textColor="#ffffff"/>
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/mangaButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Mangas" />
+            android:text="Manga"
+            android:background="@color/colorAccent"
+            android:textColor="#ffffff"/>
+
     </android.support.v7.widget.LinearLayoutCompat>
 
     <FrameLayout
