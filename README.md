@@ -1,5 +1,7 @@
 # Anime App
 
-Es una app que permite ver una lista de animes y mangas, al hacer click en uno de los animes o mangas muestra una vista 
-mas detallada y la sinopsis de este.
-Cuenta con un navigationdrawer que puedes utilizar para moverte entre pestañas.
+App that loads from and API a json with animes and mangas.
+
+It uses Fragments, retrofit, and a Recycle View.
+
+You can click on the elements to have a detail view of them.
